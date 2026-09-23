@@ -8,7 +8,6 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import java.util.Locale
 
 /**
  * Consent-first laboratory entry point.
@@ -54,17 +53,24 @@ class MainActivity : Activity() {
             text = "Usage autorisé uniquement. Aucune donnée réelle, aucun secret et aucun contenu réseau ne doivent être utilisés."
             textSize = 15f
         })
-        add(researcherAttestation = CheckBox(this).apply {
+
+        researcherAttestation = CheckBox(this).apply {
             text = "Je suis autorisé par le protocole de recherche et j'utilise un appareil de test."
-        })
-        add(consent = CheckBox(this).apply {
+        }
+        add(researcherAttestation)
+
+        consent = CheckBox(this).apply {
             text = "J'accepte la collecte locale limitée de métriques synthétiques décrite dans la politique."
-        })
-        add(enableButton = Button(this).apply {
+        }
+        add(consent)
+
+        enableButton = Button(this).apply {
             text = "Activer la recherche"
             setOnClickListener { grantResearchAccess() }
-        })
-        add(revokeButton = Button(this).apply {
+        }
+        add(enableButton)
+
+        revokeButton = Button(this).apply {
             text = "Révoquer et supprimer les données locales"
             setOnClickListener {
                 consentStore.revoke()
@@ -74,12 +80,17 @@ class MainActivity : Activity() {
                 refreshState()
                 toast("Consentement révoqué et données supprimées")
             }
-        })
-        add(exportButton = Button(this).apply {
+        }
+        add(revokeButton)
+
+        exportButton = Button(this).apply {
             text = "Exporter un rapport synthétique"
             setOnClickListener { exportResearchReport() }
-        })
-        add(status = TextView(this).apply { textSize = 14f })
+        }
+        add(exportButton)
+
+        status = TextView(this).apply { textSize = 14f }
+        add(status)
         setContentView(root)
     }
 
