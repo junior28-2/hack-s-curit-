@@ -1,0 +1,23 @@
+# Local and sensitive files
+local.properties
+.env
+*.jks
+*.keystore
+*.p12
+backup.ab
+extracted_prefs.xml
+*.pcap
+*.pcapng
+
+# Android/Gradle outputs
+.gradle/
+build/
+app/build/
+.cxx/
+.idea/
+*.iml
+captures/
+
+# Secrets and local reports
+secrets/
+reports/private/
