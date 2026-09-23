@@ -6,29 +6,37 @@ on:
   pull_request:
     branches: [ "main", "master" ]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Récupérer le code source
-      uses: actions/checkout@v4
+      - name: Récupérer le code source
+        uses: actions/checkout@v4
 
-    - name: Configurer Java JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
+      - name: Configurer Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-    - name: Accorder les permissions d'exécution à Gradle
-      run: chmod +x gradlew
+      - name: Configurer Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.2'
 
-    - name: Compiler l'APK de test (Debug)
-      run: ./gradlew assembleDebug
+      - name: Compiler l'APK de laboratoire
+        run: gradle --no-daemon assembleDebug
 
-    - name: Téléverser l'APK généré
-      uses: actions/upload-artifact@v4
-      with:
-        name: app-debug-apk
-        path: app/build/outputs/apk/debug/app-debug.apk
+      - name: Vérifier l'APK généré
+        run: test -f app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Téléverser l'APK généré
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 7
