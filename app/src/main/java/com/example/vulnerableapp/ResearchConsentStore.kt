@@ -2,19 +2,9 @@ package com.example.vulnerableapp
 
 import android.content.Context
 
-/**
- * Explicit opt-in gate for optional, privacy-preserving research telemetry.
- *
- * This class does not collect or transmit data by itself. Callers must obtain
- * consent before recording any event and must implement the approved, local
- * export path separately. No identifiers, credentials, payloads, contacts,
- * location, or network content may be added to research records.
- */
+/** Explicit consent for optional local research metrics. */
 class ResearchConsentStore(context: Context) {
-    private val preferences = context.getSharedPreferences(
-        "ResearchConsent",
-        Context.MODE_PRIVATE
-    )
+    private val preferences = context.getSharedPreferences("ResearchConsent", Context.MODE_PRIVATE)
 
     fun hasConsent(currentPolicyVersion: String): Boolean =
         preferences.getBoolean(KEY_GRANTED, false) &&
@@ -28,16 +18,7 @@ class ResearchConsentStore(context: Context) {
             .apply()
     }
 
-    fun revoke() {
-        preferences.edit().clear().apply()
-    }
-
-    fun grantedAtMillis(): Long? =
-        if (preferences.contains(KEY_GRANTED_AT)) {
-            preferences.getLong(KEY_GRANTED_AT, 0L)
-        } else {
-            null
-        }
+    fun revoke() = preferences.edit().clear().apply()
 
     companion object {
         private const val KEY_GRANTED = "granted"
